@@ -41,3 +41,33 @@ def search(query):
             'profile_picture_url': u['profile_picture_url'],
         })
     return results
+
+def get_profile_id():
+    response = venmo.singletons.session().get(venmo.settings.PROFILE_URL)
+    return response.json()['data']['user']['id']
+
+def feed(limit=10):
+    venmo.auth.ensure_access_token()
+    user_id = get_profile_id()
+    response = venmo.singletons.session().get(venmo.settings.FEED_URL + user_id + "?limit=" + str(limit))
+    response_dict = response.json()
+    for i,d in enumerate(response_dict['data']):
+        print("Transaction #" + str(i + 1))
+        if d['type'] == 'transfer':
+            print("    Transfered $" + str(d['transfer']['amount']) + " to '" +
+                d['transfer']['destination']['name'] + "' on " +
+                d['transfer']['date_requested'].split('T')[0])
+        elif d['type'] == 'payment':
+            if d['payment']['actor']['id'] == user_id:
+                print("    You paid " + d['payment']['target']['user']['display_name'] + " $" +
+                    str(d['payment']['amount']) + " on " +
+                    d['date_created'].split('T')[0])
+            else:
+                print("    " + d['payment']['actor']['display_name'] + " paid you $" +
+                    str(d['payment']['amount']) + " on " + 
+                    d['date_created'].split('T')[0])
+        else:
+            print("    You paid " + d['authorization']['merchant']['display_name'] + " $" +
+                str((d['authorization']['amount']/100.0)) + " on " +
+                    d['date_created'].split('T')[0])
+        print()

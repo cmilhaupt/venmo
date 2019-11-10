@@ -13,7 +13,9 @@ COOKIES_FILE = os.path.join(DOT_VENMO, 'cookies')
 # URLs
 ACCESS_TOKEN_URL = 'https://api.venmo.com/v1/oauth/access_token'
 AUTHORIZATION_URL = 'https://api.venmo.com/v1/oauth/authorize'
+FEED_URL = 'https://api.venmo.com/v1/stories/target-or-actor/'
 PAYMENTS_URL = 'https://api.venmo.com/v1/payments'
 TWO_FACTOR_URL = 'https://venmo.com/api/v5/two_factor/token'
 TWO_FACTOR_AUTHORIZATION_URL = 'https://venmo.com/login'
 USERS_URL = 'https://api.venmo.com/v1/users'
+PROFILE_URL = 'https://api.venmo.com/v1/me'
